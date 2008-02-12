@@ -1,0 +1,8 @@
+RC Generator
+============
+
+A simple code generator. 
+
+= Usage
+
+  rake generator:build <generator_name>
