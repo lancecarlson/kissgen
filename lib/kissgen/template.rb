@@ -1,4 +1,4 @@
-module RCGen
+module KISSGen
   class Template
     attr_reader :path, :copy_path
     

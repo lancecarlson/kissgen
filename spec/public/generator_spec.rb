@@ -1,24 +1,24 @@
 require(File.join(File.dirname(__FILE__), "/../spec_helper"))
 
-describe RCGen::Generator do
+describe KISSGen::Generator do
   describe "new" do
     before(:each) do
       @path = File.dirname(__FILE__) + "/generators/merb_app"
       @copy_path = File.expand_path(File.dirname(__FILE__) + "/generators/empty")
       @bad_path = File.dirname(__FILE__) + "/doesnotexist"
       @empty = File.dirname(__FILE__) + "/generators/empty"
-      @generator = RCGen::Generator.new(@path, @copy_path)
+      @generator = KISSGen::Generator.new(@path, @copy_path)
     end
     
     it "should fail if the path doesn't exist" do
       lambda { 
-        RCGen::Generator.new(@bad_path, @copy_path) 
+        KISSGen::Generator.new(@bad_path, @copy_path) 
       }.should raise_error("Generator path does not exist in #{File.expand_path(@bad_path)}")
     end
     
     it "should fail if the setup file cannot be found" do
       lambda {
-        RCGen::Generator.new(@empty, @copy_path)
+        KISSGen::Generator.new(@empty, @copy_path)
       }.should raise_error("Setup file does not exist in #{File.expand_path(@empty)}")
     end
     

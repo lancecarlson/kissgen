@@ -1,12 +1,12 @@
 require(File.join(File.dirname(__FILE__), "/../spec_helper"))
 
-describe RCGen::Generator do
+describe KISSGen::Generator do
   describe "new" do
     before(:each) do
       @copy_dir = File.dirname(__FILE__) + "/generators/empty/app"
       @path = File.dirname(__FILE__) + "/generators/merb_app/app/views/layout/application.html.erb"
       @copy_path = File.dirname(__FILE__) + "/generators/empty/app/views/layout/application.html.erb"
-      @template = RCGen::Template.new(@path, @copy_path)
+      @template = KISSGen::Template.new(@path, @copy_path)
     end
     
     def application_erb_output

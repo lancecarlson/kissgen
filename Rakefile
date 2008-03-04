@@ -4,13 +4,13 @@ require "rake/gempackagetask"
 require "rake/rdoctask"
 require "spec/rake/spectask"
 
-require "lib/rcgen/version"
+require "lib/kissgen/version"
 
-NAME = "rcgen"
+NAME = "kissgen"
 
 spec = Gem::Specification.new do |s|
-  s.name = NAME
-  s.version = RCGen::VERSION
+  s.name         = NAME
+  s.version      = KISSGen::VERSION
   s.platform     = Gem::Platform::RUBY
   s.author       = "Lance Carlson"
   s.email        = "lancecarlson@gmail.com"
@@ -18,7 +18,7 @@ spec = Gem::Specification.new do |s|
   s.summary      = "A Simple Code Generator"
   s.bindir       = "bin"
   s.description  = s.summary
-  s.executables  = %w( rcgen )
+  s.executables  = %w( kissgen )
   s.require_path = "lib"
   s.files        = %w( LICENSE README Rakefile ) + Dir["{bin,spec,lib}/**/*"]
   s.has_rdoc         = true
