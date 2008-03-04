@@ -3,8 +3,9 @@ require(File.join(File.dirname(__FILE__), "/../spec_helper"))
 describe RCGen::Generator do
   describe "new" do
     before(:each) do
+      @copy_dir = File.dirname(__FILE__) + "/generators/empty/app"
       @path = File.dirname(__FILE__) + "/generators/merb_app/app/views/layout/application.html.erb"
-      @copy_path = File.dirname(__FILE__) + "/generators/empty"
+      @copy_path = File.dirname(__FILE__) + "/generators/empty/app/views/layout/application.html.erb"
       @template = RCGen::Template.new(@path, @copy_path)
     end
     
@@ -28,8 +29,9 @@ describe RCGen::Generator do
     
     it "should create the file in the copy directory and feed it the erb output" do
       @template.create
-      IO.read(@template.new_path).should == application_erb_output
+      IO.read(@template.copy_path).should == application_erb_output
       @template.delete
+      FileUtils.remove_dir(@copy_dir)
     end
 
   end

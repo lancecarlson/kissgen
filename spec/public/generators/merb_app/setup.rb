@@ -1,4 +1,4 @@
-add_file "README", "/../empty"
-add_directory "app", "/../empty", :locals => {
-  
-}
+@setup = KISSGen::Setup.new do
+  file "README", "/"
+  directory "app", "/../empty/app"
+end
