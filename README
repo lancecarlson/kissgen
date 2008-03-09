@@ -9,9 +9,9 @@ Keep it stupid simple (or simple stupid) code generator.
 == API Usage
 
   require 'rcgen'
-  KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
-  KISSGen::Generator.generate(:pretend => true)
-  KISSGen::Generator.generate
+  @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
+  @g.generate(:pretend => true)
+  @g.generate
   
 == Console Usage
 
