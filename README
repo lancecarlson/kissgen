@@ -3,6 +3,13 @@ RC Generator
 
 A simple code generator. 
 
-= Usage
+= API Usage
+
+  require 'rcgen'
+  KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
+  KISSGen::Generator.generate(:pretend => true)
+  KISSGen::Generator.generate
+  
+= Console Usage (TODO)
 
   rake generator:build <generator_name>

@@ -1,4 +1,3 @@
-@setup = KISSGen::Setup.new do
-  file "README", "/"
-  directory "app", "/../empty/app"
-end
+file "README"
+file "Rakefile"
+directory "app"

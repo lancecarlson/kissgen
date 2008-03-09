@@ -10,29 +10,21 @@ describe KISSGen::Generator do
       @generator = KISSGen::Generator.new(@path, @copy_path)
     end
     
-    it "should fail if the path doesn't exist" do
-      lambda { 
-        KISSGen::Generator.new(@bad_path, @copy_path) 
-      }.should raise_error("Generator path does not exist in #{File.expand_path(@bad_path)}")
-    end
-    
     it "should fail if the setup file cannot be found" do
       lambda {
         KISSGen::Generator.new(@empty, @copy_path)
-      }.should raise_error("Setup file does not exist in #{File.expand_path(@empty)}")
+      }.should raise_error("Setup file does not exist in #{File.expand_path(@empty) + "/setup.rb"}")
     end
     
     it "should import template files for a new generator" do
-      @generator.files.length.should == 18
-      @generator.files[0].copy_path.should == "#{@copy_path}/README"
-      @generator.files[1].copy_path.should == "#{@copy_path}/app/controllers"
-      @generator.files[2].copy_path.should == "#{@copy_path}/app/controllers/application.rb"
-      @generator.files[3].copy_path.should == "#{@copy_path}/app/controllers/exceptions.rb"
-      @generator.files[4].copy_path.should == "#{@copy_path}/app/controllers/posts.rb"
-      @generator.files[5].copy_path.should == "#{@copy_path}/app/helpers"
-      @generator.files[6].copy_path.should == "#{@copy_path}/app/helpers/global_helpers.rb"
-      @generator.files[7].copy_path.should == "#{@copy_path}/app/models"
-      @generator.files[8].copy_path.should == "#{@copy_path}/app/models/article.rb"
+      @generator.files.length.should == 12
+      @generator.files[0].copy_path.should == "README"
+      @generator.files[1].copy_path.should == "Rakefile"
+      @generator.files[2].copy_path.should == "app/controllers/application.rb"
+      @generator.files[3].copy_path.should == "app/controllers/exceptions.rb"
+      @generator.files[4].copy_path.should == "app/controllers/posts.rb"
+      @generator.files[5].copy_path.should == "app/helpers/global_helpers.rb"
+      @generator.files[6].copy_path.should == "app/models/article.rb"
     end
     
     it "should allow you to pretend to generate the files and output the results" do

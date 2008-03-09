@@ -3,10 +3,13 @@ require(File.join(File.dirname(__FILE__), "/../spec_helper"))
 describe KISSGen::Generator do
   describe "new" do
     before(:each) do
-      @copy_dir = File.dirname(__FILE__) + "/generators/empty/app"
-      @path = File.dirname(__FILE__) + "/generators/merb_app/app/views/layout/application.html.erb"
-      @copy_path = File.dirname(__FILE__) + "/generators/empty/app/views/layout/application.html.erb"
-      @template = KISSGen::Template.new(@path, @copy_path)
+      @copy_from = File.dirname(__FILE__) + "/generators/merb_app/app"
+      @copy_to = File.dirname(__FILE__) + "/generators/empty/app"
+      @path = "views/layout/application.html.erb"
+      @generator = mock(KISSGen::Generator)
+      @generator.stub!(:path).and_return(@copy_from)
+      @generator.stub!(:copy_path).and_return(@copy_to)
+      @template = KISSGen::Template.new(@generator, @path, @path)
     end
     
     def application_erb_output
@@ -29,9 +32,9 @@ describe KISSGen::Generator do
     
     it "should create the file in the copy directory and feed it the erb output" do
       @template.create
-      IO.read(@template.copy_path).should == application_erb_output
+      IO.read(@template.full_copy_path).should == application_erb_output
       @template.delete
-      FileUtils.remove_dir(@copy_dir)
+      FileUtils.remove_dir(@copy_to)
     end
 
   end

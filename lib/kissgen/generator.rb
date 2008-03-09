@@ -19,16 +19,18 @@ module KISSGen
       @explain_pretend = "== PRETEND MODE: Would have created the following files: =="
       @explain_generate = "== Generated the following files: =="
       @explain_footer = "====== Generator Finished ======"
-      @setup_file_path = @path + "/setup.rb"
       
       import_setup
     end
     
+    def setup_file_path
+      @path + "/setup.rb"
+    end
+    
     # Import setup file which is located in /path/to/generator/setup.rb
     def import_setup
-      raise SetupFailure, "Generator path does not exist in #{File.expand_path(@path)}" unless File.stat(@path).directory?
-      raise SetupFailure, "Setup file does not exist in #{File.expand_path(@setup_file_path)}" unless File.exists?(@setup_file_path)
-      require @setup_file_path
+      raise SetupFailure, "Setup file does not exist in #{File.expand_path(setup_file_path)}" unless File.exists?(setup_file_path)
+      instance_eval(File.new(setup_file_path).read)
     end
     
     def generate(options = {})
@@ -45,30 +47,29 @@ module KISSGen
     # 
     # This will generate the template README file relative to the copy path
     #
-    #   file "README", "/../empty"
-    def file(relative_file_path, relative_copy_path = "/", options = {})
-      template = Template.new(
-        File.join(@path, relative_file_path), 
-        File.join(@path, relative_copy_path)
-      )
+    #   file "README"
+    #
+    # or
+    #
+    #   file "README", "README_PLEASE"
+    def file(relative_file_path, relative_copy_path = relative_file_path, options = {})
+      template = Template.new(self, relative_file_path, relative_copy_path)
       @files << template
       template
     end
     
-    def directory(directory_path, relative_copy_path, options = {})
-      #Dir["#{full_path(directory_path)}/**/*"].each do |file_path|
-        #unless FileTest.directory?(move_path(copy_path, directory_path, file_path))
-          #add_file(file_path, move_path(copy_path, directory_path, file_path), options)
-        #end
-      #end
-    end
-    
-    # Given the old directory and the new copy directory, it will return the new move path
-    # Directory path: merb_app/
-    # Copy Path: empty/
-    # File Path: merb_app/app/blah
-    def move_path(directory_path, copy_path, file_path)
-      File.join(full_path(copy_path), file_path.gsub(full_path(directory_path), ""))
+    # Recursively adds a directory to the list of files to generate
+    # 
+    # directory "app"
+    def directory(directory_path, relative_copy_path = directory_path, options = {})
+      Dir["#{File.join(@path, directory_path)}/**/*"].each do |file_path|
+        unless FileTest.directory?(file_path)
+          # Take the template file path and give relative paths
+          relative_path = Pathname.new(file_path).relative_path_from(Pathname.new(File.join(@path, directory_path)))
+          new_path = File.join(relative_copy_path, relative_path)
+          @files << Template.new(self, File.join(directory_path, relative_path), new_path)
+        end
+      end
     end
   end
 end
