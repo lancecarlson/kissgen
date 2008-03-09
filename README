@@ -3,6 +3,10 @@ RC Generator
 
 A simple code generator. 
 
+= Installation
+
+  gem install kissgen
+
 = API Usage
 
   require 'rcgen'
@@ -13,3 +17,7 @@ A simple code generator.
 = Console Usage (TODO)
 
   rake generator:build <generator_name>
+
+= Repository
+
+  visit http://github.com/lancecarlson/kissgen/ or git clone git://github.com/lancecarlson/kissgen.git
