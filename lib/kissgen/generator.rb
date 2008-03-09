@@ -6,9 +6,8 @@ module KISSGen
   #   KISSGen::Generator.generate(:pretend => true)
   #   KISSGen::Generator.generate
   class Generator
-    class SetupFailure < StandardError; end
     
-    attr_reader :path, :copy_path, :files
+    attr_reader :path, :copy_path, :files, :assigns
     attr_accessor :explain_pretend, :explain_created, :explain_footer
     attr_accessor :setup_file_path
     
@@ -16,6 +15,7 @@ module KISSGen
       @path = path
       @copy_path = copy_path
       @files = []
+      @assigns = {}
       @explain_pretend = "== PRETEND MODE: Would have created the following files: =="
       @explain_generate = "== Generated the following files: =="
       @explain_footer = "====== Generator Finished ======"
@@ -29,8 +29,7 @@ module KISSGen
     
     # Import setup file which is located in /path/to/generator/setup.rb
     def import_setup
-      raise SetupFailure, "Setup file does not exist in #{File.expand_path(setup_file_path)}" unless File.exists?(setup_file_path)
-      instance_eval(File.new(setup_file_path).read)
+      instance_eval(File.new(setup_file_path).read) if File.exists?(setup_file_path)
     end
     
     def generate(options = {})
@@ -70,6 +69,15 @@ module KISSGen
           @files << Template.new(self, File.join(directory_path, relative_path), new_path)
         end
       end
+    end
+    
+    # assigns :app_file_name, "lancelot"
+    def assign(name, value)
+      @assigns[name] = value
+    end
+    
+    def delete
+      @files.each { |file| file.delete }
     end
   end
 end

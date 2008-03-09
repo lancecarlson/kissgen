@@ -4,16 +4,10 @@ describe KISSGen::Generator do
   describe "new" do
     before(:each) do
       @path = File.dirname(__FILE__) + "/generators/merb_app"
-      @copy_path = File.expand_path(File.dirname(__FILE__) + "/generators/empty")
+      @copy_path = File.dirname(__FILE__) + "/generators/empty"
       @bad_path = File.dirname(__FILE__) + "/doesnotexist"
       @empty = File.dirname(__FILE__) + "/generators/empty"
       @generator = KISSGen::Generator.new(@path, @copy_path)
-    end
-    
-    it "should fail if the setup file cannot be found" do
-      lambda {
-        KISSGen::Generator.new(@empty, @copy_path)
-      }.should raise_error("Setup file does not exist in #{File.expand_path(@empty) + "/setup.rb"}")
     end
     
     it "should import template files for a new generator" do
@@ -34,6 +28,28 @@ describe KISSGen::Generator do
     it "should generate new template files when no options are not set" do
       @generator.generate
       File.exists?(@copy_path + "/README").should be_true
+      File.delete(@copy_path + "/README")
+      File.delete(@copy_path + "/Rakefile")
+    end
+  end
+  
+  describe "assigns" do
+    before(:each) do
+      @path = File.dirname(__FILE__) + "/generators/merb_very_flat"
+      @copy_path = File.dirname(__FILE__) + "/generators/empty"
+      @generator = KISSGen::Generator.new(@path, @copy_path)
+      @generator.directory "/"
+    end
+    
+    it "should allow you to pass through assigned methods" do
+      class String; def camel_case; split('_').map{|e| e.capitalize}.join; end; end
+      @generator.assign :app_file_name, "lancelot"
+      
+      @generator.assigns.should == {:app_file_name => "lancelot"}
+      @generator.files.first.copy_path.should == "/lancelot.rb"
+      
+      @generator.generate
+      @generator.delete
     end
   end
 end

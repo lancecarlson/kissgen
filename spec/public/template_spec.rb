@@ -9,6 +9,7 @@ describe KISSGen::Generator do
       @generator = mock(KISSGen::Generator)
       @generator.stub!(:path).and_return(@copy_from)
       @generator.stub!(:copy_path).and_return(@copy_to)
+      @generator.stub!(:assigns).and_return({})
       @template = KISSGen::Template.new(@generator, @path, @path)
     end
     

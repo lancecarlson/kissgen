@@ -1,7 +1,8 @@
 module KISSGen
   class Template
     class SourceFileNotFoundError < StandardError; end
-    attr_reader :generator, :path, :copy_path
+    
+    attr_reader :generator, :path
     
     def initialize(generator, path, copy_path)
       @generator = generator
@@ -11,25 +12,30 @@ module KISSGen
       source_path_check
     end
     
+    def copy_path
+      @copy_path.gsub(/%([^\}]*)%/) {|a| @generator.assigns[$1.to_sym]} # Yehuda OWNZ
+    end
+    
     def source_path_check
       raise SourceFileNotFoundError, "Template source file could not be found at #{full_source_path}" unless File.exists?(full_source_path)
     end
     
     def full_source_path
-      File.join @generator.path, @path
+      File.join @generator.path, path
     end
     
     def full_copy_path
-      File.join @generator.copy_path, @copy_path
+      File.join @generator.copy_path, copy_path
     end
     
     # Parsed ERB output
     def output
-      ERB.new(IO.read(full_source_path)).result
-    end
-    
-    def get_file
+      b = binding
       
+      # define local assignment variables
+      @generator.assigns.each { |name, value| eval "#{name} = \"#{value}\"", b }
+      
+      ERB.new(File.read(full_source_path), 0, "%<>").result(b)
     end
     
     def write_or_prompt
@@ -38,9 +44,9 @@ module KISSGen
         @replace = gets.chomp
         if ["Y","y",""].include? @replace
           write
-          puts "#{copy_path} Replaced."
+          puts "#{copy_path} replaced."
         else
-          puts "#{copy_path} Preserved."
+          puts "#{copy_path} preserved."
         end
       else
         write
@@ -49,7 +55,7 @@ module KISSGen
     
     # This will create the file with parsed data in the destination directory
     def create
-      puts @copy_path
+      puts copy_path
       FileUtils.mkdir_p(File.dirname(full_copy_path))
 
       write_or_prompt
