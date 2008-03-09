@@ -13,9 +13,9 @@ Keep it stupid simple (or simple stupid) code generator.
   KISSGen::Generator.generate(:pretend => true)
   KISSGen::Generator.generate
   
-== Console Usage (TODO)
+== Console Usage
 
-  rake generator:build <generator_name>
+  kissgen /path/to/generator /path/where/files/are/generated
 
 == Repository
 

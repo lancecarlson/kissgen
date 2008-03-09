@@ -1,11 +1,11 @@
 #! /usr/bin/env ruby
 #
 
-unless ARGV.size == 2
-  puts "Usage: kissgen /path/to/generator /path/to/generate/files"
+unless ARGV.size == 2 || ARGV.size == 3
+  puts "Usage: kissgen /path/to/generator /path/to/generate/files [-p]"
   exit
 end
 
 require "kissgen"
 @generator = KISSGen::Generator.new ARGV.shift, ARGV.shift
-@generator.generate
+ARGV.shift == "-p" ? @generator.generate(:pretend => true) : @generator.generate

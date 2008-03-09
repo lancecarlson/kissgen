@@ -73,7 +73,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include("lib/**/*.rb")
 end
 
-desc 'send rdoc to rubyforge'
+desc "send rdoc to rubyforge"
 task :rf_doc do
   sh %{sudo chmod -R 755 doc}
   sh %{/usr/bin/scp -r -p doc/* lancelot@rubyforge.org:/var/www/gforge-projects/kissgen}
@@ -83,5 +83,6 @@ end
 # misc
 ##############################################################################
 task :release => :package do
+  puts "Remember to login if you haven't"
   sh %{rubyforge add_release #{NAME} #{NAME} "#{KISSGen::VERSION}" pkg/#{NAME}-#{KISSGen::VERSION}.gem}
 end
