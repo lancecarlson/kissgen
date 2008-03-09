@@ -2,9 +2,11 @@ module KISSGen
   # The generator class is where you configure path and import files
   # 
   #   require 'rcgen'
-  #   KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
-  #   KISSGen::Generator.generate(:pretend => true)
-  #   KISSGen::Generator.generate
+  #   @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
+  #   @g.directory = "/"
+  #   @g.assign :my_name, "lancelot"
+  #   @g.generate(:pretend => true)
+  #   @g.generate
   class Generator
     
     attr_reader :path, :copy_path, :files, :assigns
