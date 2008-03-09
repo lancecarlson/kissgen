@@ -10,8 +10,18 @@ Keep it stupid simple (or simple stupid) code generator.
 
   require 'rcgen'
   @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
+  @g.directory = "/"
+  @g.assign :my_name, "lancelot"
   @g.generate(:pretend => true)
   @g.generate
+  
+Instead of using @g.directory and @g.assign, you can also create a setup.rb file inside of your generator directory
+and run the instance methods directly from there. IE:
+  
+setup.rb:
+
+  directory "/app"
+  file "README"
   
 == Console Usage
 
