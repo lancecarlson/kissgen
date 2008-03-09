@@ -8,7 +8,7 @@ Keep it stupid simple (or simple stupid) code generator.
 
 == API Usage
 
-  require 'rcgen'
+  require 'kissgen'
   @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
   @g.directory = "/"
   @g.assign :my_name, "lancelot"
