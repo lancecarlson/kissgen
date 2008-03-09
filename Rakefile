@@ -60,3 +60,28 @@ Spec::Rake::SpecTask.new("rcov") do |t|
   t.rcov = true
   t.rcov_opts = ['--exclude', 'gems', '--exclude', 'spec']
 end
+
+##############################################################################
+# documentation
+##############################################################################
+Rake::RDocTask.new do |rdoc|
+  rdoc.rdoc_dir = 'doc'
+  rdoc.title    = 'KISSGen'
+  rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
+  rdoc.options << '--charset' << 'utf-8'
+  rdoc.rdoc_files.include("README", "LICENSE")
+  rdoc.rdoc_files.include("lib/**/*.rb")
+end
+
+desc 'send rdoc to rubyforge'
+task :rf_doc do
+  sh %{sudo chmod -R 755 doc}
+  sh %{/usr/bin/scp -r -p doc/* lancelot@rubyforge.org:/var/www/gforge-projects/anvil}
+end
+
+##############################################################################
+# misc
+##############################################################################
+task :release => :package do
+  sh %{rubyforge add_release #{NAME} #{NAME} "#{KISSGen::VERSION}" pkg/#{NAME}-#{KISSGen::VERSION}.gem}
+end
