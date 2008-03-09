@@ -14,7 +14,7 @@ spec = Gem::Specification.new do |s|
   s.platform     = Gem::Platform::RUBY
   s.author       = "Lance Carlson"
   s.email        = "lancecarlson@gmail.com"
-  s.homepage     = "http://rcgen.rubyforge.org"
+  s.homepage     = "http://kissgen.rubyforge.org"
   s.summary      = "A Simple Code Generator"
   s.bindir       = "bin"
   s.description  = s.summary
@@ -76,7 +76,7 @@ end
 desc 'send rdoc to rubyforge'
 task :rf_doc do
   sh %{sudo chmod -R 755 doc}
-  sh %{/usr/bin/scp -r -p doc/* lancelot@rubyforge.org:/var/www/gforge-projects/anvil}
+  sh %{/usr/bin/scp -r -p doc/* lancelot@rubyforge.org:/var/www/gforge-projects/kissgen}
 end
 
 ##############################################################################
