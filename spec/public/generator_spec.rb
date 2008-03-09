@@ -32,9 +32,8 @@ describe KISSGen::Generator do
     end
     
     it "should generate new template files when no options are not set" do
-      #@generator.generate
-      #puts @copy_path
-      #File.exists?(@copy_path + "/README").should be_true
+      @generator.generate
+      File.exists?(@copy_path + "/README").should be_true
     end
   end
 end

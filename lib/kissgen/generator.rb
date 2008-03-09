@@ -37,7 +37,7 @@ module KISSGen
       puts(options[:pretend] ? @explain_pretend : @explain_generate)
       
       @files.each do |file|
-        puts(options[:pretend] ? "#{file.copy_path}" : file.create)
+        options[:pretend] ? puts("#{file.copy_path}") : file.create
       end
       
       puts @explain_footer
