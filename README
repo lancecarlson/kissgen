@@ -1,23 +1,22 @@
-RC Generator
-============
+= RC Generator
 
 A simple code generator. 
 
-= Installation
+== Installation
 
   gem install kissgen
 
-= API Usage
+== API Usage
 
   require 'rcgen'
   KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
   KISSGen::Generator.generate(:pretend => true)
   KISSGen::Generator.generate
   
-= Console Usage (TODO)
+== Console Usage (TODO)
 
   rake generator:build <generator_name>
 
-= Repository
+== Repository
 
   visit http://github.com/lancecarlson/kissgen/ or git clone git://github.com/lancecarlson/kissgen.git
