@@ -1,0 +1,11 @@
+#! /usr/bin/env ruby
+#
+
+unless ARGV.size == 2
+  puts "Usage: kissgen /path/to/generator /path/to/generate/files"
+  exit
+end
+
+require "kissgen"
+@generator = KISSGen::Generator.new ARGV.shift, ARGV.shift
+@generator.generate

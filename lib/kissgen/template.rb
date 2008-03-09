@@ -29,7 +29,7 @@ module KISSGen
     end
     
     def get_file
-      @file = File.new full_copy_path, "w"
+      
     end
     
     def write_or_prompt
@@ -51,12 +51,12 @@ module KISSGen
     def create
       puts @copy_path
       FileUtils.mkdir_p(File.dirname(full_copy_path))
-      
-      get_file
+
       write_or_prompt
     end
     
     def write
+      @file = File.new full_copy_path, "w"
       @file.print output # Taylor OWNZ
       @file.close
     end

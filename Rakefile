@@ -36,7 +36,7 @@ end
 desc "Run :package and install the resulting .gem"
 task :install do
   sh %{rake package}
-  sh %{sudo gem install pkg/#{NAME}-#{VERS}}
+  sh %{sudo gem install pkg/#{NAME}-#{KISSGen::VERSION}}
 end
 
 desc "Run :clean and uninstall the .gem"
