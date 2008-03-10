@@ -1,47 +1,89 @@
 module KISSGen
+  #
   # The generator class is where you configure path and import files
-  # 
-  #   require 'rcgen'
-  #   @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
-  #   @g.directory = "/"
-  #   @g.assign :my_name, "lancelot"
-  #   @g.generate(:pretend => true)
-  #   @g.generate
+  #
+  # == Example 1:
+  #   require "kissgen"
+  #   @generator = KISSGen::Generator.new("/path/to/generator", "/path/where/files/are/generated")
+  #   @generator.directory = "/"
+  #   @generator.assign :my_name, "lancelot"
+  #   @generator.generate(:pretend => true)
+  #   @generator.generate
+  #
+  # == Example 2:
+  #   require "kissgen"
+  #
+  #   @generator = KISSGen.generator(
+  #                    :generator => "/path/to/generator", 
+  #                    :directory => "/path/where/files/are/generated", 
+  #                    :pretend   => true,
+  # Proposed:          :assignes  => {:my_name => "lancelot", ...},
+  # Proposed:          :files     => {"app", "models"}
+  #                   )
+  #
+  #  Now perform the generation:
+  #
+  #    @generator.generate!
+  #
+  #  Note that the last loaded generator is retrievable via:
+  #
+  #   @generator = KISSGen.generator # => Last loaded generator
+  #   
+  
+  class << self
+    attr_accessor :generator
+    def generate(*args)
+      @generator = KISSGen::Generator.new(*args)
+    end
+    def generate!(*options)
+      generator.generate(*options)
+    end
+  end
+  
   class Generator
+    attr_reader   :path, :files, :assigns
+    attr_accessor :explain
     
-    attr_reader :path, :copy_path, :files, :assigns
-    attr_accessor :explain_pretend, :explain_created, :explain_footer
-    attr_accessor :setup_file_path
-    
-    def initialize(path, copy_path)
-      @path = path
-      @copy_path = copy_path
-      @files = []
-      @assigns = {}
-      @explain_pretend = "== PRETEND MODE: Would have created the following files: =="
-      @explain_generate = "== Generated the following files: =="
-      @explain_footer = "====== Generator Finished ======"
+    def initialize(*args)
+      @path = {}
+      if args.class == Hash
+        @path[:source] = args[:source]
+        @path[:target] = args[:target]
+        @assigns = args[:assigns] || {}
+        # @options[:pretend] = args[:pretend]
+      else
+        @path[:source] = args[0]
+        @path[:target] = args[1]
+        @assigns = {}
+      end
+
+      @files   = []
+      @explain = {
+        :pretend  => "== PRETEND MODE (The following files would be created) ==",
+        :generate => "== Generated the following files: ==",
+        :footer   => "====== Generator Finished ======"
+      }
       
       import_setup
     end
     
-    def setup_file_path
-      @path + "/setup.rb"
+    def generator_file
+      "#{@path[:source]}/setup.rb"
     end
     
     # Import setup file which is located in /path/to/generator/setup.rb
     def import_setup
-      instance_eval(File.new(setup_file_path).read) if File.exists?(setup_file_path)
+      instance_eval(File.new(generator_file).read) if File.exists?(generator_file)
     end
     
     def generate(options = {})
-      puts(options[:pretend] ? @explain_pretend : @explain_generate)
+      puts(options[:pretend] ? @explain[:pretend] : @explain[:generate])
       
       @files.each do |file|
-        options[:pretend] ? puts("#{file.copy_path}") : file.create
+        options[:pretend] ? puts("#{file.target}") : file.create
       end
       
-      puts @explain_footer
+      puts @explain[:footer]
     end
     
     # Adds a file to the list of files to generate
@@ -53,8 +95,8 @@ module KISSGen
     # or
     #
     #   file "README", "README_PLEASE"
-    def file(relative_file_path, relative_copy_path = relative_file_path, options = {})
-      template = Template.new(self, relative_file_path, relative_copy_path)
+    def file(relative_file_path, relative_target = relative_file_path, options = {})
+      template = Template.new(self, relative_file_path, relative_target)
       @files << template
       template
     end
@@ -62,12 +104,12 @@ module KISSGen
     # Recursively adds a directory to the list of files to generate
     # 
     # directory "app"
-    def directory(directory_path, relative_copy_path = directory_path, options = {})
-      Dir["#{File.join(@path, directory_path)}/**/*"].each do |file_path|
+    def directory(directory_path, relative_target = directory_path, options = {})
+      Dir["#{File.join(@path[:source], directory_path)}/**/*"].each do |file_path|
         unless FileTest.directory?(file_path)
           # Take the template file path and give relative paths
-          relative_path = Pathname.new(file_path).relative_path_from(Pathname.new(File.join(@path, directory_path)))
-          new_path = File.join(relative_copy_path, relative_path)
+          relative_path = Pathname.new(file_path).relative_path_from(Pathname.new(File.join(@path[:source], directory_path)))
+          new_path = File.join(relative_target, relative_path)
           @files << Template.new(self, File.join(directory_path, relative_path), new_path)
         end
       end

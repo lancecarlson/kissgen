@@ -18,7 +18,7 @@ Keep it stupid simple (or simple stupid) code generator.
 Instead of using @g.directory and @g.assign, you can also create a setup.rb file inside of your generator directory
 and run the instance methods directly from there. IE:
   
-setup.rb:
+generator.rb:
 
   directory "/app"
   file "README"

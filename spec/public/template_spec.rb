@@ -7,10 +7,10 @@ describe KISSGen::Generator do
       @copy_to = File.dirname(__FILE__) + "/generators/empty/app"
       @path = "views/layout/application.html.erb"
       @generator = mock(KISSGen::Generator)
-      @generator.stub!(:path).and_return(@copy_from)
-      @generator.stub!(:copy_path).and_return(@copy_to)
+      @generator.stub!(:source).and_return(@copy_from)
+      @generator.stub!(:target).and_return(@copy_to)
       @generator.stub!(:assigns).and_return({})
-      @template = KISSGen::Template.new(@generator, @path, @path)
+      @template = KISSGen::Template.new(@generator, @path, @copy_to)
     end
     
     def application_erb_output
@@ -33,7 +33,7 @@ describe KISSGen::Generator do
     
     it "should create the file in the copy directory and feed it the erb output" do
       @template.create
-      IO.read(@template.full_copy_path).should == application_erb_output
+      IO.read(@template.full_target).should == application_erb_output
       @template.delete
       FileUtils.remove_dir(@copy_to)
     end
