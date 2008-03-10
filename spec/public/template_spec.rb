@@ -5,12 +5,14 @@ describe KISSGen::Generator do
     before(:each) do
       @copy_from = File.dirname(__FILE__) + "/generators/merb_app/app"
       @copy_to = File.dirname(__FILE__) + "/generators/empty/app"
-      @path = "views/layout/application.html.erb"
+      @target = "views/layout/application.html.erb"
+      @source = "views/layout/application.html.erb"
       @generator = mock(KISSGen::Generator)
       @generator.stub!(:source).and_return(@copy_from)
       @generator.stub!(:target).and_return(@copy_to)
       @generator.stub!(:assigns).and_return({})
-      @template = KISSGen::Template.new(@generator, @path, @copy_to)
+      @generator.stub!(:path).and_return({:source => @copy_from, :target => @copy_to})
+      @template = KISSGen::Template.new(@generator, @source, @target)
     end
     
     def application_erb_output

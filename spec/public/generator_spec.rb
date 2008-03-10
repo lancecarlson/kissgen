@@ -28,8 +28,7 @@ describe KISSGen::Generator do
     it "should generate new template files when no options are not set" do
       @generator.generate
       File.exists?(@target + "/README").should be_true
-      File.delete(@target + "/README")
-      File.delete(@target + "/Rakefile")
+      @generator.delete
     end
   end
   

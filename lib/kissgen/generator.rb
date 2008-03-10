@@ -17,7 +17,7 @@ module KISSGen
   #                    :generator => "/path/to/generator", 
   #                    :directory => "/path/where/files/are/generated", 
   #                    :pretend   => true,
-  # Proposed:          :assignes  => {:my_name => "lancelot", ...},
+  # Proposed:          :assigns  => {:my_name => "lancelot", ...},
   # Proposed:          :files     => {"app", "models"}
   #                   )
   #
