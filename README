@@ -8,24 +8,35 @@ Keep it stupid simple (or simple stupid) code generator.
 
 == API Usage
 
-  require 'kissgen'
-  @g = KISSGen::Generator.new "/path/to/generator", "/path/where/files/are/generated"
-  @g.directory = "/"
-  @g.assign :my_name, "lancelot"
-  @g.generate(:pretend => true)
-  @g.generate
+  require "kissgen"
+
+  @generator = KISSGen.generator(
+                   :generator => "/path/to/generator", 
+                   :directory => "/path/where/files/are/generated", 
+                   :pretend   => true,
+                   :assignes  => {:my_name => "lancelot", ...},
+                   :files     => {"app", "models"}
+                  )
+
+ Now perform the generation:
+
+   @generator.generate!
+
+ Note that the last loaded generator is retrievable via:
+
+  @generator = KISSGen.generator # => Last loaded generator
+  
   
 Instead of using @g.directory and @g.assign, you can also create a setup.rb file inside of your generator directory
 and run the instance methods directly from there. IE:
   
-generator.rb:
-
+setup.rb:
   directory "/app"
   file "README"
   
 == Console Usage
 
-  kissgen /path/to/generator /path/where/files/are/generated
+  kissgen -s /path/to/generator -t /path/where/files/are/generated
 
 == Repository
 
