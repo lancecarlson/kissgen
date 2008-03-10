@@ -5,4 +5,4 @@ require "kissgen"
 require "kissgen/cli"
 
 KISSGen.parse_args
-KISSGen.generator(KISSGen.config)
+KISSGen.generator(KISSGen.config).generate!
