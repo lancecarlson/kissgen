@@ -1,4 +1,4 @@
-#! /usr/bin/env ruby
+#!/usr/bin/env ruby
 #
 
 unless ARGV.size == 2 || ARGV.size == 3
